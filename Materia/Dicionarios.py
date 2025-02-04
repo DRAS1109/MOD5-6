@@ -1,4 +1,4 @@
-"Definir um dicionário: { chave: valor}"
+"Definir um dicionário: {chave: valor}"
 #Criar um dicionario com uma chave (com um valor dentro):
 Dicionario = {}
 print(Dicionario)
@@ -20,7 +20,7 @@ def Remover_Alterar():
     Dicionario["Nome"] = input("Introduza um nome: ")
     print(Dicionario["Nome"])
 
-    #Remover Cave:Valor do Dicionario
+    #Remover Chave:Valor do Dicionario
     Valor = Dicionario.pop("Idade", "Não existe nenhuma Chave chamada: 'Idade'")
     print(f"Idade (removida): {Valor}")
 
