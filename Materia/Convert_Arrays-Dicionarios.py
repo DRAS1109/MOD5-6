@@ -1,3 +1,3 @@
 import numpy as np
 
-#Def
+Meu_Array = np.empty(10, dtype=object)
