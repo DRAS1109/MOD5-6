@@ -1,5 +1,5 @@
 """
-Calcular o 
+Calcular o Indice de Jaccard
 (A (interseção) B) / (A (União) B)
 """
 
