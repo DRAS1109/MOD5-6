@@ -5,6 +5,7 @@ O programa deve mostrar qual a marca com mais veiculos
 - Parar de ler quando ele inserir uma marca vazia
 - Calcular para cada uma marca quantos carros existem
 - Mostrar marca com mais carros
+- Remover uma marca
 """
 Carro = " "
 Carros_L = []
@@ -49,3 +50,13 @@ for Carro in Carros_S:
         Maior_C = Carro
 
 print(f"Carro mais repetido: {Maior_C} com {Maior} carros")
+
+#Remover uma marca
+Rem = input("Introduza uma marca que pretende remover: ")
+
+while True:
+    if Rem in Carros_L:
+        Carros_L.remove(Rem)
+
+    else: 
+        break
