@@ -18,7 +18,7 @@ Hacker:
 
 - Adicionar a possibilidade de comprar produtos novos
 """
-Produtos = ["Batatas", "Bananas", "Arroz"    , "Bacalhau", "Maçãs"]
+Produtos = ["batatas", "bananas", "arroz"    , "bacalhau", "maçãs"]
 Stock    = [10       , 50       , 10         , "5"       , "5"    ]
 Unidades = ["Kg"     , "Kg"     , "Embalagem", "Unidade" , "Kg"   ]
 
@@ -30,21 +30,39 @@ def Vender(Quantidade, Produto):
     
     Indice  = Produtos.index(Produto)
 
-    if Stock[Indice] > Quantidade:
+    if Stock[Indice] >= Quantidade:
         print(f"Vendeu {Quantidade} {Unidades[Indice]} de {Produto}")
         Stock[Indice] = Stock[Indice] - Quantidade
-        Consultar()
+        Consultar(Produto)
     
     else:
         print("Não pode vender mais do que tem no stock x_X")
 
-def Comprar(Produto):
-    if Verificação(Produto) == False:
-        return
+def Comprar(Quantidade, Produto):
+    if Produto in Produtos:
+        Indice = Produtos.index(Produto)
 
-    #TODO:
-    #Não comprar produtos negativos
-    #Comprar produtos novos
+        #Não comprar produtos negativos
+        if Quantidade > 0:
+            print(f"Comporu {Quantidade} {Unidades[Indice]} de {Produto}")
+            Stock[Indice] = Stock[Indice] + Quantidade
+            Consultar(Produto)
+    
+        else:
+            print("Não pode comprar produtos negativos x_X")
+        
+    else: 
+        #Comprar produtos novos
+        Op = input(f"{Produto} ainda não está nos seus produtos, pretende adiciona-lo? (S/N)")
+
+        if Op.lower() == "s":
+            Unidade = input(f"Qual a unidade de medida de {Produto}? ")
+            print(f"Comporu {Quantidade} {Unidade} de {Produto}")
+            Produtos.append(Produto)
+            Stock.append(Quantidade)
+            Unidades.append(Unidade)
+            Consultar(Produto)
+
 
 def Consultar(Produto):
     """Recebe o produto e mostra a quantidade no stock"""
@@ -62,19 +80,29 @@ def Verificação(Produto):
     return True
 
 def main():
-    #Frase[1] = Operação | Frase[2] = Quantidade | Frase[3] = Produto 
     while True:
         Frase = input("O que deseja fazer? ").strip()
-        Frase = Frase.split(" ")
-
-        if Frase[0] == "Vender":
-            Vender(Frase[1], Frase[2])
-
-        elif Frase[0] == "Comprar":
-            Comprar()
+        Op = Frase.split(" ")
         
-        elif Frase[0] == "Consultar":
-            Consultar(Frase[2])
+        if len(Op) == 3:
+            Operacao = Op[0].strip().lower()
+            Quantidade = Op[1].strip().lower()
+            Produto = Op[2].strip().lower()
+
+        elif Operacao == "vender":
+            Vender(int(Quantidade), Produto)
+
+        elif Operacao == "comprar":
+            Comprar(int(Quantidade), Produto)
+        
+        elif Operacao == "consultar":
+            Consultar(Quantidade)
+        
+        elif Frase == "":
+            break
         
         else:
             print("Desculpe, não conheço este comando")
+
+if __name__ == "__main__":
+    main()
