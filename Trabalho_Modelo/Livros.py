@@ -25,13 +25,16 @@ def MenuLivros():
             Listar(Livros)
 
         if Op == 3 :
-            pass
+            Editar()
 
         if Op == 4 :
             pass
 
         if Op == 5 :
-            Pesquisar()
+            Pesquisar_Listar()
+
+#Campos que não podem ser editados pelo utilizador
+Livros_Campos_Privados = ["Id", "Estado", "Leitor", "Nr Emprestimos"]
 
 def Configurar():
     #Lista de Livros de exemplo
@@ -81,6 +84,53 @@ def Adicionar():
     print(f"Livro registado com sucesso. Tem {len(Livros)} livros \n")
 
 #Editar Livros
+def Editar():
+    #Pesquisar o livro a editar
+    Livros_Editar = Pesquisar()
+
+    #Mostrar os dados de cada um dos livros encontrados
+    if len(Livros_Editar) == 0:
+        print("Não foram encontrados livros.")
+        return
+    
+    #Mostrar todos os livros
+    Listar(Livros_Editar)
+
+    #Permitir alterar os dados
+    Id = Utils.Ler_Inteiro("Introduza o Id do livro a editar ou 0 (zero) para cancelar: ")
+
+    if Id == 0:
+        return
+
+    #Livro com o Id indicado
+    Livro = None
+    for l in Livros_Editar:
+        if l["Id"] == Id:
+            Livro = l
+            break
+
+    if Livro == None:
+        print("O Id indicado não existe.")
+        return
+
+    #Criar lista com todos os campos do livro
+    Lista_Campos = list(Livro.keys())
+
+    #Remover os campos privados
+    for C in Livros_Campos_Privados:
+        Lista_Campos.remove(C) 
+
+    #Escolher o campo a editar
+    Op = Utils.Menu(Lista_Campos, "Qual o campo a editar? ")
+    Campo = Lista_Campos[Op - 1]
+    
+    #Mostrar o valor atual do campo a editar
+    print(f"O campo {Campo} tem o valor {Livro[Campo]}\n")
+    Novo_Valor = Utils.Ler_Strings(3, "Novo Valor: ")
+
+    #Guardar o novo valor:
+    Livro[Campo] = Novo_Valor
+    print("Edição concluida com sucesso.")
 
 #Apagar Livros
 
@@ -94,8 +144,14 @@ def Listar(Livros):
     for Livro in Livros:
         print(f"Id: {Livro["Id"]} | Nome: {Livro["Titulo"]} | Autor: {Livro["Autor"]} | Estado: {Livro["Estado"]} ")
         print("-" * 80)
+    
+    print("")
 
 #Pesquisar Livros
+def Pesquisar_Listar():
+    Resultado = Pesquisar
+    Listar(Resultado)
+
 def Pesquisar():
     """Devolver a lista dos livros que correspondem a um critério"""
     #Deixar o utilizador escolher o campo de pesquisa
@@ -113,4 +169,5 @@ def Pesquisar():
     for Livro in Livros:
         if Pesquisa.lower() in Livro[Campo].lower():
             L_Resultado.append(Livro)
-    Listar(L_Resultado)
+
+    return(L_Resultado)
