@@ -108,7 +108,7 @@ def Menu(Opcoes, Titulo=""):
     """Função recebe as opções a mostrar de um menu. Le a opção do utilizador e se for válida devolve essa opção"""
     #Mostrar o titulo do menu
     if Titulo != "":
-        print(Titulo)
+        F_Titulo(Titulo)
 
     #Mostrar as opções com 1 nº
     for i in range(len(Opcoes)):
@@ -124,3 +124,20 @@ def Media(Valores):
     """Devolve a média dos valores de um tuple ou lista"""
 
     return sum(Valores/len(Valores))
+
+#Alterado a 12-03-2025
+def Ler_Strings(Tamanho_Min, Mensagen="Introduza um texto: "):
+    """Função devolve uma string com um mínimo de letras. 
+    Remove os espaços em branco do inicio e do final. 
+    Mostra uma mensagem para a introdução do código"""
+    while True:
+        Texto = input(Mensagen)
+        Texto = Texto.strip()
+        if len(Texto) >= Tamanho_Min:
+            return(Texto)
+        
+        print(f"O texto inserido não é válido. Tem de ter no mínimo {Tamanho_Min} de letras\n")
+
+def F_Titulo(Mensagem):
+    """Função que coloca a mensagem do Titulo entre linhas"""
+    print(f" {"_"*(len(Mensagem) + 2)}\n| {Mensagem} |\n{" ̅"*(len(Mensagem) + 2)}")

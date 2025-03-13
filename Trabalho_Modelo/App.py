@@ -9,10 +9,15 @@ Requesitos funcionais:
     - Estatísticas (Empréstimos em atraso, Top Livros, Top Mês, Top Leitores, ...)
 
 """
-import Utils
-import Livros
+import Utils, Livros
+
+#Deve estar True quando em testes e False quando em produção
+DEBUG = True
 
 def MenuPrincipal():
+    if DEBUG:
+        Livros.Configurar()
+
     Op = 0
     while Op != 5:
         Op = Utils.Menu(["Livros", "Leitores", "Empréstimos / Devoluções", "Estatísticas", "Sair"], "Menu Principal")
