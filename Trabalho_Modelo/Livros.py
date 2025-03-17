@@ -133,6 +133,32 @@ def Editar():
     print("Edição concluida com sucesso.")
 
 #Apagar Livros
+def Apagar():
+    #Verificar se a lista está vazia
+    if len(Livros) == 0:
+        print("Não existem livros para apagar.")
+        return
+    
+    #Pesquisar os livros com título semelhante
+    L_Livros = Pesquisar()
+
+    #Verificar se encontrou pelo menos 1
+    if len(L_Livros) == 0:
+        print("Não foi encontrado nenhum livro.")
+        return
+
+
+    #Confirmar para cada um dos leitores se deseja apagar
+    for Livro in L_Livros:
+        print(f"Titulo: {Livro["Titulo"]} | Autor: {Livro("Autor")} | Id: {Livro["Id"]}")
+        Op = input("Deseja remover este livro (s/n)?")
+        if Op in "Ss":
+            #TODO: Confirmar se o livro não esta emprestado
+            Livros.remove(Livro)
+            break
+    
+    print(f"Livro removido com sucesso. Tem {len(Livros)} livros")
+
 
 #Listar Livros
 def Listar(Livros):
