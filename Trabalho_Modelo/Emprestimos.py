@@ -26,6 +26,5 @@ def Emprestimo():
     # Registar o empréstimo com data de devolução
     # Atualizar o estado do livro
 
-
 def Devolocao():
     pass
