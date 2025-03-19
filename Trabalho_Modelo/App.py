@@ -9,7 +9,7 @@ Requesitos funcionais:
     - Estatísticas (Empréstimos em atraso, Top Livros, Top Mês, Top Leitores, ...)
 
 """
-import Utils, Livros, Leitores
+import Utils, Livros, Leitores, Emprestimos
 
 #Deve estar True quando em testes e False quando em produção
 DEBUG = True
@@ -32,6 +32,9 @@ def MenuPrincipal():
 
         if Op == 2:
             Leitores.MenuLeitores()
+        
+        if Op == 3:
+            Emprestimos.MenuEmprestimos()
 
 if __name__ == "__main__":
     MenuPrincipal()

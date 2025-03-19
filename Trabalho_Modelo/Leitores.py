@@ -57,6 +57,13 @@ def Configurar():
     """Inserir dados de exemplo"""
     Leitores.extend(Exemplo_Leitores)
 
+def Get_Livro(Id):
+    """Função devolve o leitor com base no Id indicado"""
+    for Leitor in Leitores:
+        if Leitor["Id"] == Id:
+            return Leitor
+    return None
+
 #Adicionar Leitor
 def Adicionar():
     Utils.F_Titulo("Adicionar novo Leitor")
@@ -171,11 +178,11 @@ def Pesquisar_Listar():
     Resultado = Pesquisar()
     Listar(Resultado)
 
-def Pesquisar():
+def Pesquisar(Titulo = "Escolha o campo de pesquisa: "):
     """Devolver a lista dos leitores que correspondem a um critério"""
 
     #Deixar o utilizador escolher o campo de pesquisa
-    Op = Utils.Menu(["Id","Nome", "Email"],"Escolha o campo de pesquisa: ")
+    Op = Utils.Menu(["Id","Nome", "Email"], Titulo)
 
     #Criar uma lista para os resultados
     L_Resultado = []

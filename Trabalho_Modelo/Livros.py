@@ -46,6 +46,13 @@ def Configurar():
     """Insere dados de exemplo"""
     Livros.extend(Exemplo_Livros)
 
+def Get_Livro(Id):
+    """Função devolve o livro com base no Id indicado"""
+    for Livro in Livros:
+        if Livro["Id"] == Id:
+            return Livro
+    return None
+
 #Adicionar Livro
 def Adicionar():
     Utils.F_Titulo("Adicionar novo Livro")
@@ -178,10 +185,10 @@ def Pesquisar_Listar():
     Resultado = Pesquisar
     Listar(Resultado)
 
-def Pesquisar():
+def Pesquisar(Titulo = "Escolha o campo de pesquisa: "):
     """Devolver a lista dos livros que correspondem a um critério"""
     #Deixar o utilizador escolher o campo de pesquisa
-    Op = Utils.Menu(["Autor","Titulo"],"Escolha o campo de pesquisa: ")
+    Op = Utils.Menu(["Autor","Titulo"],Titulo)
 
     #Criar uma lista para os resultados
     L_Resultado = []
@@ -189,7 +196,7 @@ def Pesquisar():
         Campo = "Autor"
     else:
         Campo = "Titulo"
-    Pesquisa = Utils.Ler_Strings(3,f"{Campo} a pesquisar: ")
+    Pesquisa = Utils.Ler_Strings(1,f"{Campo} a pesquisar: ")
 
     #Adicionar à lista os livros que correspondem ao resultado da pesquisa
     for Livro in Livros:
