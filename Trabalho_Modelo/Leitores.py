@@ -2,6 +2,7 @@
 Modulo de Gestão dos Leitores"
 """
 import Utils
+import os
 
 """
 Ideias:
@@ -17,6 +18,7 @@ Leitores = []
 #Menu Leitores
 def MenuLeitores():
     """SubMenu para gerir os leitores"""
+    os.system("cls")
 
     Op = 0
     while Op != 6:
@@ -50,14 +52,14 @@ Leitores_Campos_Privados = ["Id", "Infracoes"]
 def Configurar():
     #Lista de Leitores de exemplo
     Exemplo_Leitores = [
-    {"Id": 1, "Nome": "Leitor 1", "Idade": 20, "Email": "Leitor1@gmail.com", "Infracoes": 0},
-    {"Id": 2, "Nome": "Leitor 2", "Idade": 34, "Email": "Leitor2@gmail.com", "Infracoes": 0},
-    {"Id": 3, "Nome": "Leitor 3", "Idade": 98, "Email": "Leitor3@gmail.com", "Infracoes": 0}]
+    {"Id": 1, "Nome": "Leitor 1", "Idade": 20, "Email": "Leitor1@gmail.com", "Infracoes": ""},
+    {"Id": 2, "Nome": "Leitor 2", "Idade": 34, "Email": "Leitor2@gmail.com", "Infracoes": ""},
+    {"Id": 3, "Nome": "Leitor 3", "Idade": 98, "Email": "Leitor3@gmail.com", "Infracoes": ""}]
 
     """Inserir dados de exemplo"""
     Leitores.extend(Exemplo_Leitores)
 
-def Get_Livro(Id):
+def Get_Leitor(Id):
     """Função devolve o leitor com base no Id indicado"""
     for Leitor in Leitores:
         if Leitor["Id"] == Id:
@@ -86,7 +88,7 @@ def Adicionar():
             "Nome": Nome,
             "Idade": Idade,
             "Email": Email,
-            "Infracoes": None}
+            "Infracoes": ""}
     
     Leitores.append(Novo)
     print(f"Leitor registado com sucesso. Tem {len(Leitores)} leitores \n")

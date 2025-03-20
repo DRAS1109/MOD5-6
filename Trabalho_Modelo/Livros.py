@@ -2,6 +2,7 @@
 Modulo de Gestão dos livros
 """
 import Utils
+import os
 
 #Lista dos Livros
 Livros = []
@@ -9,6 +10,7 @@ Livros = []
 #Menu Livros
 def MenuLivros():
     """SubMenu para gerir os livros"""
+    os.system("cls")
 
     Op = 0
     while Op != 6:

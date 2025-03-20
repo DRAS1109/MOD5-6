@@ -3,16 +3,21 @@ Modulo Emprestimos e devolocoes
 """
 import Utils, Livros, Leitores
 from datetime import datetime, timedelta
+import os
 
 #Livro, Leitor, Data_Emprestimo, Data_Devolução, Estado
 Emprestimos = []
 
 def MenuEmprestimos():
+    """SubMenu para gerir os empréstimos"""
+    os.system("cls")
+
     Op = 0
     while Op != 3:
-        Op = Utils.Menu(["Empréstimos", "Devolução", "Voltar"], "Menu de Empréstimos / Devoluções")
+        Op = Utils.Menu(["Empréstimos", "Devolução", "Listar", "Voltar"], "Menu de Empréstimos / Devoluções")
 
-        if Op == 3:
+        if Op == 4:
+            os.system("cls")
             break
 
         if Op == 1:
@@ -20,6 +25,9 @@ def MenuEmprestimos():
 
         if Op == 2:
             Devolocao()
+        
+        if Op == 3:
+            Listar()
 
 def Emprestimo():
     #Dados do emprestimo a adicionar à lista
@@ -76,8 +84,9 @@ def Emprestimo():
                 Novo["Leitor"] = Leitor
                 break
 
-        if Leitor not in Livro:
+        if Leitor not in Novo:
             print("O Id indicado não existe. \n")
+            return
 
     else:
         Novo["Leitor"] = Leitor_Emprestimo[0]
@@ -89,16 +98,22 @@ def Emprestimo():
 
     #Transformar as datas em string
     Str_Data_Atual = Data_Atual.strftime("%Y-%m-%d")
-    Str_Data_Entrega = Data_Atual.strftime("%Y-%m-%d")
+    Str_Data_Entrega = Data_Entrega.strftime("%Y-%m-%d")
 
     #Adicionar ao dicionario a data atual e a data de entrega
     Novo["Data Emprestimo"] = Str_Data_Atual
     Novo["Data Devolução"] = Str_Data_Entrega
+    Novo["Estado"] = True
+    Emprestimos.append(Novo)
 
     # Atualizar o estado do livro
-    Novo["Livro"]["Estado"] = "Esprestado"
+    Novo["Livro"]["Estado"] = "Emprestado"
     Novo["Livro"]["Leitor"] = Novo["Leitor"]
+
     print("Emprestimo registado com sucesso :D \n")
+    print(f"Livro Emprestado: {Novo["Livro"]}")
+    print(f"Leitor: {Novo["Leitor"]}")
+    
 
 def Devolocao():
     """
@@ -107,8 +122,6 @@ def Devolocao():
     """
     # Ler o Id do Livro a devolver
     Id_Livro = Utils.Ler_Inteiro("Introduza o Id do livro a devolver: ")
-
-
 
     # Verificar se o livro está emprestado
     Livro = Livros.Get_Livro(Id_Livro)
@@ -119,13 +132,28 @@ def Devolocao():
         print("Esse livro não está emprestado")
 
     # Verificar se a devolução está dentro do prazo
+    Emprestimo_Devolover = None
 
+    for Emprestimo in Emprestimos:
+        if Emprestimo["Livro"] == Livro and Emprestimo["Estado"] == True:
+            Emprestimo_Devolover = Emprestimo
 
-    # Registar se houve infração do leitor (entregar o livro estragado ou fora do prazo)
-    Tem_Infracao = Utils.Menu(["Sim", "Não"], "Alguma infração do leitor?")
+    if Emprestimo_Devolover == None:
+        print("Empréstimo não encontrado x_x \n")
+        return
+    
+    Data_Devolucao = Emprestimo_Devolover["Data Devolução"]
+    Data_Atual = datetime.now()
 
-    if Tem_Infracao == 1:
-        Infracao = input("Qual foi a infração? ")
+    #Comparar como datetime ou inteiro? Resposta Afonso: Inteirooooo
+    IData_Atual = int(Data_Atual.strftime("%Y%m%d"))
+    IData_Devolução = int(datetime.strptime(Data_Devolucao, "%Y-%m-%d").strftime("%Y%m%d"))
+
+    if IData_Atual > IData_Devolução:
+        print("Devolução fora de prazo \n")
+
+        # Registar se houve infração do leitor
+        Emprestimo_Devolover["Leitor"]["Infrações"] += "Entrega fora de Prazo"
     
     # Atualizar o nº de emprestimos do livro
     Livro["Nr Emprestimos"] += 1
@@ -135,3 +163,15 @@ def Devolocao():
     Livro["Leitor"] = None
 
     # Mudar o estado do emprestimo
+    Emprestimo_Devolover["Estado"] = False
+    print("Devolução concluida com sucesso \n")
+
+def Listar():
+    # Perguntar se pretende ver todos os empréstimos
+    # Só os empréstimos por concluir
+
+    Op = Utils.Ler_Strings(1, "Listar [T]odos ou só [C]oncluir")
+
+    for Emp in Emprestimos:
+        if Op in "Tt" or (Op in "Cc" and Emp["Estado"] == True):
+            print(f"{Emp["Livro"]["Titulo"]} {Emp["Leitor"]["Nome"]} {Emp["Estado"]}")

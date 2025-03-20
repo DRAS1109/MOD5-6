@@ -19,3 +19,19 @@ print(f"O código {Codigo} tem {Dicionario[Codigo]["Visitas"]} visitas. \n")
 Codigo = int(input("Codigo Visitante: "))
 Dicionario[Codigo][Visitas] += 1
 print(f"O código {Codigo} passou a ter {Dicionario[Codigo]["Visitas"]} visitas.")
+
+#4 Mostrar a cidade com mais visitantes
+Maior = 0
+Cidade_Maior = ""
+for Chave in Dicionario:
+    Temp_Cidade = Dicionario[Chave]["Cidade"]
+    Nr_Visitas = Dicionario[Chave]["Visitas"]
+    for Codigo in Dicionario:
+        if Temp_Cidade == Dicionario[Codigo]["Visita"]:
+            Nr_Visitas += Dicionario[Codigo]["Visita"]
+    
+    if Nr_Visitas > Maior:
+        Cidade_Maior = Temp_Cidade
+        Maior = Nr_Visitas
+
+print(Cidade_Maior)

@@ -10,6 +10,7 @@ Requesitos funcionais:
 
 """
 import Utils, Livros, Leitores, Emprestimos
+import os
 
 #Deve estar True quando em testes e False quando em produção
 DEBUG = True
@@ -21,6 +22,7 @@ def MenuPrincipal():
 
     Op = 0
     while Op != 5:
+        os.system("cls")
         Op = Utils.Menu(["Livros", "Leitores", "Empréstimos / Devoluções", "Estatísticas", "Sair"], "Menu Principal")
         print("")
 
