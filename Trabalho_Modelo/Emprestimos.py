@@ -170,7 +170,7 @@ def Listar():
     # Perguntar se pretende ver todos os empréstimos
     # Só os empréstimos por concluir
 
-    Op = Utils.Ler_Strings(1, "Listar [T]odos ou só [C]oncluir")
+    Op = Utils.Ler_Strings(1, "Listar [T]odos ou só [C]oncluir ")
 
     for Emp in Emprestimos:
         if Op in "Tt" or (Op in "Cc" and Emp["Estado"] == True):
