@@ -140,4 +140,6 @@ def Ler_Strings(Tamanho_Min, Mensagen="Introduza um texto: "):
 
 def F_Titulo(Mensagem):
     """Função que coloca a mensagem do Titulo entre linhas"""
+    if Mensagem == None:
+        return
     print(f" {"_"*(len(Mensagem) + 2)}\n| {Mensagem} |\n{" ̅"*(len(Mensagem) + 2)}")
