@@ -19,7 +19,7 @@ def Ler_Inteiro(Mensagem="Introduza um valor inteiro: ") -> int:
 
         if Testar.isdigit():
             return int(Dados)
-        print("Erro: O valor inserido não é válido \n")
+        print("Erro: O valor inserido não é válido, precisa de ser um digito \n")
 
 
 def Ler_Inteiro_Limites(Min, Max=None, Mensagem="Introduza um valor inteiro: ") -> int:
@@ -35,7 +35,12 @@ def Ler_Inteiro_Limites(Min, Max=None, Mensagem="Introduza um valor inteiro: ") 
             return X
         
         else:
-            print("O valor não é válido\n")
+            print("O valor não é válido")
+            if Max == None:
+                print(f"Precisa de ser um digito maior que {Min}\n")
+            
+            else:
+                print(f"Precisa de ser um digito maior que {Min} e menor que {Max}\n")
 
 def Ler_Decimal(Mensagem="Introduza um valor inteiro: "):
     """
@@ -68,7 +73,7 @@ def Ler_Decimal(Mensagem="Introduza um valor inteiro: "):
         #Não pode ter mais de 1 ponto decimal e só pode ter digitos
         if Testar.isdigit() and Pontos <= 1:
             return float(Dados)
-        print("Erro: O valor inserido não é válido \n")
+        print("Erro: O valor inserido não é válido, precisa de ser um digito \n")
 
 def Ler_Decimal_Limites(Min, Max=None, Mensagem="Introduza um valor inteiro: ") -> int:
     """

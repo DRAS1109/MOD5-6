@@ -2,13 +2,10 @@
 Modulo de gestão de obras
 """
 import Utils
-from datetime import datetime 
+from datetime import datetime
 
 #Lista das obras:
 Colecao = []
-
-#Campos que não podem ser editados pelo utilizador
-Obras_Campos_Priv = ["Id"] #TODO: Só tem 1 parametro pois futuramente pode ser necessario adicionar mais
 
 #Lista de raridades das obras
 Raridades = ["Comum", "Raro", "Epico", "Lendario", "Mitico"]
@@ -48,17 +45,19 @@ def Adicionar():
 
     #Ano
     Str_Data_Atual = Data()
+    Str_Data_Atual = Str_Data_Atual.split("-")
     Ano_Atual = int(Str_Data_Atual[0])
-    Ano = Utils.Ler_Inteiro_Limites(None, Ano_Atual, "Introduza o ano criação da obra: ")
+    Ano = Utils.Ler_Inteiro_Limites(-999999999, Ano_Atual, "Introduza o ano criação da obra: ")
 
     #Autor
     Autor = Utils.Ler_Strings(2, "Qual o autor da obra? ")
 
     #Preço Atual
-    Preco_Atual = Utils.Ler_Strings(2, "Qual o preço atual da obra? ")
+    Preco_Atual = Utils.Ler_Decimal("Qual o preço atual da obra? ")
 
     #Raridade
-    Raridade = Utils.Menu(Raridades, "Qual a raridade da obra? ")
+    N_Raridade = Utils.Menu(Raridades, "Qual a raridade da obra? ")
+    Raridade = Raridades[N_Raridade - 1]
 
     #Descrição
     Descricao = Utils.Ler_Strings(2, "Introduza uma pequena descrição da obra: \n")
@@ -81,10 +80,15 @@ def Adicionar():
 
 #Editar
 def Editar():
+    #Verificar se existem obras no museu
+    if len(Colecao) == 0:
+        print("Não existem obras na coleção")
+        return
+    
     #Pesquisar a obra a editar
-    Resultado = Pesquisar()
+    Resultado = Pesquisar("Campo a pesquisar")
 
-    #Mostrar se não encontrar nenhum livro
+    #Mostrar se não encontrar nenhuma obra
     if len(Resultado) == 0:
         print("Não foram encontradas obras com esse critério x_X")
         return
@@ -98,20 +102,65 @@ def Editar():
         return
     
     Obra_Encontrada = None #Caso não encontre nenhuma obra, a variavel fica criada
-    for Obra in Colecao:
+    for Obra in Resultado:
         if Obra["Id"] == Id:
             Obra_Encontrada = Obra
     
     if Obra_Encontrada == None: #Caso não exista nenhuma Obra com o Id indicado (Se estiver a None), alertar o utilizador
-        print(f"Não existe nenhuma obra com o id {Id} x_X")
+        print(f"Não foi encontrada nenhuma obra com o id {Id} x_X")
         return
     
-    #TODO: Acabar
+    #Criar lista com todos os campos da obra (Exceto id)
+    Lista_Campos = list(Obra_Encontrada.keys())
+    Lista_Campos.remove("Id")
+
+    #Escolher o campo a editar
+    Op = Utils.Menu(Lista_Campos, "Qual o campo a editar? ")
+    Campo = Lista_Campos[Op - 1]
+
+    #Mostrar o valor atual do campo a editar
+    print(f"O campo {Campo} tem o valor {Obra_Encontrada[Campo]}\n")
+    Novo_Valor = Utils.Ler_Strings(3, "Novo Valor: ")
+
+    #Guardar o novo valor:
+    Obra_Encontrada[Campo] = Novo_Valor
+    print("Edição concluida com sucesso.")
 
 #Apagar
 def Apagar():
-    #TODO:
-    pass
+    #Verificar se existem obras no museu
+    if len(Colecao) == 0:
+        print("Não existem obras na coleção")
+        return
+    
+    #Pesquisar a obra a editar
+    Resultado = Pesquisar("Campo a pesquisar")
+
+    #Mostrar se não encontrar nenhuma obra
+    if len(Resultado) == 0:
+        print("Não foram encontradas obras com esse critério x_X")
+        return
+    
+    #Mostrar todas as obras encontradas
+    Listar(Resultado, None)
+
+    #Deixar o utilizador escolher a obra a apagar e deixar o utilizador cancelar a ação
+    Id = Utils.Ler_Inteiro("Introduza o Id da Obra a editar (0 para cancelar): ")
+    if Id == 0:
+        return
+    
+    Obra_Encontrada = None #Caso não encontre nenhuma obra o programa não vai a baixo
+    for Obra in Resultado:
+        if Obra["Id"] == Id:
+            Obra_Encontrada = Obra
+    
+    if Obra_Encontrada == None: #Caso não exista nenhuma Obra com o Id indicado (Se estiver a None), alertar o utilizador
+        print(f"Não foi encontrada nenhuma obra com o id {Id} x_X")
+        return
+    
+    Colecao.remove(Obra_Encontrada)
+    print(f"Obra removida com sucesso, tem {len(Colecao)} obras")
+
 
 #Listar
 def Listar2():
@@ -159,7 +208,7 @@ def Listar(Colecao, Titulo = "Lista de Obras"):
 def Pesquisar_Listar():
     """Apresenta lista de obras que correspondem ao critério"""
     Resultado = Pesquisar()
-    Listar(Resultado)
+    Listar(Resultado, "Obras encontradas")
 
 def Pesquisar(Titulo = "Escolha o campo de pesquisa: "):
     """Devolve a lista de obras que correspondem ao critério"""
@@ -208,7 +257,3 @@ def Data():
     Data_Atual = datetime.now()
     Str_Data_Atual = Data_Atual.strftime("%Y-%m-%d")
     return Str_Data_Atual
-
-#Lista das caracteristicas
-def Caracteristicas():
-    pass
