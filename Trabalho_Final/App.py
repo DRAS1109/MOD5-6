@@ -10,7 +10,7 @@ Requesitos funcionais:
 Utilizar set:
     - caracterisicas (Tipos)
 """
-import Utils, Obras
+import Utils, Obras, Visitas
 
 #Deve estar True quando em testes e False quando em produção
 DEBUG = True
@@ -18,6 +18,7 @@ DEBUG = True
 def MenuPrincipal():
     if DEBUG:
         Obras.Configurar()
+        Visitas.Configurar()
 
     while True:
         Op = Utils.Menu(["Obras", "Visitas", "Estatísticas", "Sair"], "Menu Principal")
@@ -28,6 +29,9 @@ def MenuPrincipal():
             
         if Op == 1:
             Obras.MenuObras()
+        
+        if Op == 2:
+            Visitas.MenuVisitas()
 
 if __name__ == "__main__":
     MenuPrincipal()
