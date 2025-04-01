@@ -1,0 +1,32 @@
+Tema: Museu
+
+Funcionalidades:
+	- Gerir item (Adicionar, Editar, Apagar, Listar (Por ordem cronológica), Pesquisar)
+	- Guias Turisticos / horarios para visitas guiadas (Para visitas ao museu fisicamente) (Adicionar, Editar, Apagar, Listar, Pesquisar) 
+	- Estatisticas (Valor total da coleção, Top items mais valiosos, Horarios mais visitados)
+
+Estrutura de dados: 
+	- Lista com Dicionarios (Gerir items)
+	Colecao = [
+       {"Id": 1,
+        "Tipo": "Livro",
+        "Ano": "1984",
+        "Autor": "O melhor",
+        "Preco Atual": 15.99,
+        "Raridade": "Comum",
+        "Descricao": "Um clássico da ciencia."},
+
+       {"Id": 2,
+        "Tipo": "Moeda",
+        "Ano": "1675",
+        "Autor": "Julio César",
+        "Preco Atual": 1390.26,
+        "Raridade": "Raro",
+        "Descricao": "Uma moeda Romana"}]
+
+Ideias:
+Guias turisticos: Marcar através do programa um horario com um guia turistico (Apenas os já pré definidos)
+Possibilidade de implementar:
+- Pessoas banidas por infrações (Obriga a alterar a estrutura predefinida)
+- Lugares das obras de arte ou outro museu
+- Género ou implementar na descrição (Existem items em que não se alguns campos)

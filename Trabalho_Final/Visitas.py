@@ -20,38 +20,31 @@ import Utils
 Visitas = [{"Visita": 1, "Horario": "9-10" , "Lotacao": [], "Lotacao Maxima": 30},
            {"Visita": 2, "Horario": "11-12", "Lotacao": [], "Lotacao Maxima": 30},
            {"Visita": 3, "Horario": "15-16", "Lotacao": [], "Lotacao Maxima": 30},
-           {"Visita": 4, "Horario": "17-18", "Lotacao": [], "Lotacao Maxima": 30},]
+           {"Visita": 4, "Horario": "17-18", "Lotacao": [], "Lotacao Maxima": 30}]
 
-#Menu Obras
-def MenuVisitas():
-    """Menu para visitas"""
-
+#Menu para Horarios
+def Menu_Horarios():
+    """SubMenu para os horarios das visitas"""
     while True:
-
-        Op = Utils.Menu(["Horarios", "Visitas","Voltar"], "Menu de visitas")
+        Op = Utils.Menu(["Adicionar", "Editar", "Apagar","Listar","Voltar"], "Menu dos horarios")
         print("")
 
-        if Op == 3:
+        if Op == 5:
             break
 
         if Op == 1:
-            Horarios()
+            Adicionar_Horario()
 
         if Op == 2:
-            Visitas_Guiadas()
+            Editar()
+        
+        if Op == 3:
+            Apagar()
+        
+        if Op == 4:
+            Listar(Visitas)
 
-def Horarios():
-    """SubMenu para os horarios das visitas"""
-    
-
-def Visitas_Guiadas():
-    pass
-
-def Configurar():
-    Visitas[0]["Lotação"] = [{"Id": 1, "N_Pessoas": 2}, {"Id": 2, "N_Pessoas": 5}]
-    Visitas[1]["Lotação"] = [{"Id": 1, "N_Pessoas": 3}, {"Id": 2, "N_Pessoas": 24}]
-    Visitas[3]["Lotação"] = [{"Id": 1, "N_Pessoas": 8}, {"Id": 2, "N_Pessoas": 12}]
-
+#Adicionar Horario
 def Adicionar_Horario():
     Utils.F_Titulo("Adicionar novo horario de visita")
 
@@ -65,15 +58,22 @@ def Adicionar_Horario():
 
     #Verificar se o horario é valido
     L_Horario = Horario.split("-")
-    if (L_Horario[0] < 0 or L_Horario[0] > 24) or (L_Horario[1] < 0 or L_Horario[1] > 24):
-        print("Horario inválido. Deve ser composto por X-Y")
+    if L_Horario[0].isdigit() and L_Horario[1].isdigit():
+        L_Horario[0] = int(L_Horario[0])
+        L_Horario[1] = int(L_Horario[1])
+
+        if (L_Horario[0] < 0 or L_Horario[0] > 24) or (L_Horario[1] < 0 or L_Horario[1] > 24):
+            print("Horario inválido. Deve ser composto por numeros entre 0 e 24")
+            return
+
+        if Horario in Horarios_Visitas: #Verificar se ja existe alguma visita guiada para aquele horario
+            print("Já tem uma visita guiada para este horário")
+            return
+    else:
+        print("Horario inválido. Deve ser composto por digitos separados por -")
         return
 
-    if Horario in Horarios_Visitas: #Verificar se ja existe alguma visita guiada para aquele horario
-        print("Já tem uma visita guiada para este horário")
-        return
-    
-    #Preço Atual
+    #Lotacao Maxima
     Lotacao_Maxima = Utils.Ler_Inteiro("Qual a lotação máxima? ")
 
     #Numero da visita (id)
@@ -87,3 +87,149 @@ def Adicionar_Horario():
     
     Visitas.append(Nova_Obra)
     print(f"Visita adicionada com sucesso. \n")
+
+#Editar Horarios
+def Editar():
+    #Verificar se existem visitas guiadas
+    if len(Visitas) == 0:
+        print("Não existem visitas guiadas para editar")
+        return
+    
+    #Mostrar as visitas
+    Listar(Visitas)
+    print("")
+
+    #Utilizador escolher a visita a editar
+    Max = Visitas[len(Visitas) - 1]["Visita"] #N da ultima visita
+    N_Visita = Utils.Ler_Inteiro_Limites(0, Max,f"Visita a editar (Numero) ou 0  para cancelar: ")
+
+    if N_Visita == 0:
+        return
+
+    Visita_Encontrada = Visitas[N_Visita - 1] #Dicionario da visita encontrada
+
+    #Lista com os campos a editar
+    Lista_Campos = ["Horario", "Lotacao Maxima"]
+
+    #Escolher o campo a editar
+    Op = Utils.Menu(Lista_Campos, "Qual o campo a editar? ")
+    Campo = Lista_Campos[Op - 1]
+
+    #Se o campo a editar for Horario
+    if Campo == Lista_Campos[0]:
+        Horarios_Visitas = []
+        for Visita in Visitas:
+            Horarios_Visitas.append(Visita["Horario"])
+
+        Horario = Utils.Ler_Strings(2, "Qual o horario (Exemplo: 8-9): ")
+        Horario = Horario.strip()
+
+        #Verificar se o horario é valido
+        L_Horario = Horario.split("-")
+        if L_Horario[0].isdigit() and L_Horario[1].isdigit():
+            L_Horario[0] = int(L_Horario[0])
+            L_Horario[1] = int(L_Horario[1])
+
+            if (L_Horario[0] < 0 or L_Horario[0] > 24) or (L_Horario[1] < 0 or L_Horario[1] > 24):
+                print("Horario inválido. Deve ser composto por numeros entre 0 e 24")
+                return
+
+            if Horario in Horarios_Visitas: #Verificar se ja existe alguma visita guiada para aquele horario
+                print("Já tem uma visita guiada para este horário")
+                return
+        else:
+            print("Horario inválido. Deve ser composto por digitos separados por -")
+            return
+
+        Novo_Valor = Horario #O codigo ficaria confuso com o nome da variavel a Novo_Valor
+
+    #Se o campo a editar for Lotação maxima
+    if Campo == Lista_Campos[1]:
+        Novo_Valor = Utils.Ler_Inteiro("Qual a lotação máxima? ")
+
+    #Guardar o novo valor:
+    Visita_Encontrada[Campo] = Novo_Valor
+    print("Edição concluida com sucesso.")
+
+#Apagar
+def Apagar():
+    #Verificar se existem visitas guiadas
+    if len(Visitas) == 0:
+        print("Não existem visitas guiadas para remover")
+        return
+    
+    #Mostrar as visitas
+    Listar(Visitas)
+
+    #Utilizador escolher 
+    Max = Visitas[len(Visitas) - 1]["Visita"] #N da ultima visita
+    N_Visita = Utils.Ler_Inteiro_Limites(0, Max,f"Visita a apagar (Numero) ou 0  para cancelar: ")
+
+    if N_Visita == 0:
+        return
+    
+    Visita_Encontrada = Visitas[N_Visita - 1] #Dicionario da visita encontrada
+    Visitas.remove(Visita_Encontrada)
+    print(f"Visita removida com sucesso")
+
+#Listar 
+def Listar(Visitas, Titulo = "Lista de Visitas"):
+    """Função para listar os campos (Visita, Horario, Lotação maxima) de todas as Visitas"""
+    #Dicionario para guardar os campos e o comprimento da maior palavra de cada campo
+    Campos = {"Visita": 0, "Horario": 0, "Lotacao Maxima": 0} 
+
+    #Determinar a maior palavra de cada campo
+    for Visita in Visitas:
+        for Campo in Campos:
+            if len(str(Visita[Campo])) > Campos[Campo]:
+                Campos[Campo] = len(str(Visita[Campo])) #Guardar o tamanho da maior palavra de cada campo
+
+    #Descobiri o tamanho da linha --------------
+    Tamanho = 0
+    for Campo in Campos:
+        Tamanho += Campos[Campo] + len(Campo)
+
+    #Adicionar à variavel tamanho os "extras" (espaços, : e |)
+    Extras = (len(Campos) *2) + (len(Campos) *3) - 1 
+        #*2 porque cada campo tem : e espaço
+        #*3 porque cada campo tem espaço | espaço
+        #-1 porque começa com 1 espaço
+    Tamanho += Extras  
+
+    #Imprimir Titulo
+    Utils.F_Titulo(Titulo)
+
+    #Imprimir os dados
+    print(f" {Tamanho*"-"}")
+    for Visita in Visitas:
+        for Campo in Campos:
+            print(f" {Campo}: {Visita[Campo]} {" " * (Campos[Campo] - len(str(Visita[Campo])))}", end="|")
+        print("\n", Tamanho*"-")
+
+#Menu para Visitas Guiadas
+def Menu_Visitas_Guiadas():
+    pass
+
+
+#Configurar: Adiciona dados de teste
+def Configurar():
+    Visitas[0]["Lotação"] = [{"Id": 1, "N_Pessoas": 2}, {"Id": 2, "N_Pessoas": 5}]
+    Visitas[1]["Lotação"] = [{"Id": 1, "N_Pessoas": 3}, {"Id": 2, "N_Pessoas": 24}]
+    Visitas[3]["Lotação"] = [{"Id": 1, "N_Pessoas": 8}, {"Id": 2, "N_Pessoas": 12}]
+
+#Menu principal das visitas
+def MenuVisitas():
+    """Menu para visitas"""
+
+    while True:
+        Op = Utils.Menu(["Horarios", "Visitas","Voltar"], "Menu de visitas")
+        print("")
+
+        if Op == 3:
+            break
+
+        if Op == 1:
+            Menu_Horarios()
+
+        if Op == 2:
+            Menu_Visitas_Guiadas()

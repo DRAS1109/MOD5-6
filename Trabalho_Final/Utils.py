@@ -40,7 +40,7 @@ def Ler_Inteiro_Limites(Min, Max=None, Mensagem="Introduza um valor inteiro: ") 
                 print(f"Precisa de ser um digito maior que {Min}\n")
             
             else:
-                print(f"Precisa de ser um digito maior que {Min} e menor que {Max}\n")
+                print(f"Precisa de ser um digito > ou = {Min} e < ou = {Max}\n")
 
 def Ler_Decimal(Mensagem="Introduza um valor inteiro: "):
     """

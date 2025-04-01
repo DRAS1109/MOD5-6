@@ -44,10 +44,13 @@ def Adicionar():
     Tipo = Utils.Ler_Strings(2, "Qual o tipo da obra? ")
 
     #Ano
-    Str_Data_Atual = Data()
+    Data_Atual = datetime.now()
+    Str_Data_Atual = Data_Atual.strftime("%Y-%m-%d")
+
     Str_Data_Atual = Str_Data_Atual.split("-")
     Ano_Atual = int(Str_Data_Atual[0])
-    Ano = Utils.Ler_Inteiro_Limites(-999999999, Ano_Atual, "Introduza o ano criação da obra: ")
+
+    Ano = Utils.Ler_Inteiro_Limites(-4543000000, Ano_Atual, "Introduza o ano criação da obra: ")
 
     #Autor
     Autor = Utils.Ler_Strings(2, "Qual o autor da obra? ")
@@ -133,7 +136,7 @@ def Apagar():
         print("Não existem obras na coleção")
         return
     
-    #Pesquisar a obra a editar
+    #Pesquisar a obra a apagar
     Resultado = Pesquisar("Campo a pesquisar")
 
     #Mostrar se não encontrar nenhuma obra
@@ -145,7 +148,7 @@ def Apagar():
     Listar(Resultado, None)
 
     #Deixar o utilizador escolher a obra a apagar e deixar o utilizador cancelar a ação
-    Id = Utils.Ler_Inteiro("Introduza o Id da Obra a editar (0 para cancelar): ")
+    Id = Utils.Ler_Inteiro("Introduza o Id da Obra a apagar (0 para cancelar): ")
     if Id == 0:
         return
     
@@ -160,7 +163,6 @@ def Apagar():
     
     Colecao.remove(Obra_Encontrada)
     print(f"Obra removida com sucesso, tem {len(Colecao)} obras")
-
 
 #Listar
 def Listar2():
@@ -252,8 +254,3 @@ def Configurar():
 
     #Adicionar as obras
     Colecao.extend(Exemplo_Obras) #append adiciona, extend junta
-
-def Data():
-    Data_Atual = datetime.now()
-    Str_Data_Atual = Data_Atual.strftime("%Y-%m-%d")
-    return Str_Data_Atual
