@@ -34,9 +34,9 @@ def Adicionar_Horario():
     Horario = Horario.strip()
 
     #Verificar se o horario é valido´
-    Horarios_Visitas = []
+    Horarios_Visitas = {Visitas[0]["Horario"]}
     for Visita in Visitas:
-        Horarios_Visitas.append(Visita["Horario"])
+        Horarios_Visitas.add(Visita["Horario"])
 
     L_Horario = Horario.split("-")
     if L_Horario[0].isdigit() and L_Horario[1].isdigit():
@@ -64,13 +64,13 @@ def Adicionar_Horario():
 
     Nova_Obra ={"Visita": NVisita,
                 "Horario": Horario,
+                "Lotacao": 0, 
                 "Lotacao Maxima": Lotacao_Maxima}
     
     Visitas.append(Nova_Obra)
     print(f"Visita adicionada com sucesso. \n")
 
     #Verificar se o tamanho dos campos Visita, Horario, Lotacao Maxima é maior do que os anteriores
-    #Evita sempre que se chama o listar, testar a maior palavra
     if len(str(NVisita)) > Campos["Visita"]:
         Campos["Visita"] = len(str(NVisita))
     
@@ -78,14 +78,11 @@ def Adicionar_Horario():
         Campos["Horario"] = len(Horario)
 
     if len(str(Lotacao_Maxima)) > Campos["Lotacao Maxima"]:
-        Campos["Lotacao Maxima"] = len(str(Lotacao_Maxima))
-            
+        Campos["Lotacao Maxima"] = len(str(Lotacao_Maxima))           
 
 #Editar Horarios
 def Editar():
-    #Verificar se existem visitas guiadas
-    if len(Visitas) == 0:
-        print("Não existem visitas guiadas para editar")
+    if Verificar() == True:
         return
     
     #Mostrar as visitas
@@ -144,11 +141,13 @@ def Editar():
     Visita_Encontrada[Campo] = Novo_Valor
     print("Edição concluida com sucesso.")
 
+    #Verificar se o tamanho dos campos Visita, Horario, Lotacao Maxima é maior do que os anteriores
+    if len(str(Novo_Valor)) > Campos["Lotacao Maxima"]:
+        Campos["Lotacao Maxima"] = len(str(Novo_Valor))
+
 #Apagar
 def Apagar():
-    #Verificar se existem visitas guiadas
-    if len(Visitas) == 0:
-        print("Não existem visitas guiadas para remover")
+    if Verificar() == True:
         return
     
     #Mostrar as visitas
@@ -168,12 +167,17 @@ def Apagar():
     for N in range(N_Visita-1, Max-1):
         Visitas[N]["Visita"] -= 1
 
+    #Determinar a maior palavra de cada campo
+    for Visita in Visitas:
+        for Campo in Campos:
+            if len(str(Visita[Campo])) > Campos[Campo]:
+                Campos[Campo] = len(str(Visita[Campo]))
+
 #Listar 
 def Listar(Visitas, Titulo = "Lista de Visitas"):
     """Função para listar os campos (Visita, Horario, Lotação maxima) de todas as Visitas"""
 
-    if len(Visitas) == 0:
-        print("")
+    if Verificar() == True:
         return
 
     #Descobrir o tamanho da linha --------------
@@ -201,6 +205,9 @@ def Listar(Visitas, Titulo = "Lista de Visitas"):
 
 #Adicionar Visitantes
 def Adicionar_Visitantes():
+    if Verificar() == True:
+        return
+    
     #Numero de Pessoas
     N_Pessoas = Utils.Ler_Inteiro("Quantas pessoas são? ")
 
@@ -229,7 +236,11 @@ def Adicionar_Visitantes():
     Visita["Lotacao"] += N_Pessoas
     Visita["Id"].append({Id:N_Pessoas})
 
+#Cancelar Visitas
 def Cancelar_Visitantes():
+    if Verificar() == True:
+        return
+    
     #Utilizador escolhe qual visita
     Max = len(Visitas)
     N_Visita = Utils.Ler_Inteiro_Limites(0, Max,f"Visita a (Numero) ou 0  para cancelar: ")
@@ -244,6 +255,7 @@ def Cancelar_Visitantes():
     N_Pessoas = Visita["Id"][Id]
     Visita["Lotacao"] -= N_Pessoas
     Visita["Id"].remove({Id:N_Pessoas})
+
 
 #Menu para Horarios
 def Menu_Horarios():
@@ -274,7 +286,7 @@ def Menu_Visitas_Guiadas():
         Op = Utils.Menu(["Adicionar Visitantes", "Cancelar Visitas", "Voltar"], "Menu das visitas guiadas")
         print("")
 
-        if Op == 5:
+        if Op == 3:
             break
 
         if Op == 1:
@@ -300,6 +312,13 @@ def MenuVisitas():
         if Op == 2:
             Menu_Visitas_Guiadas()
 
+#Verificar se a lista de visitas está vazia
+def Verificar():
+    #Verificar se existem visitas guiadas
+    if len(Visitas) == 0:
+        print("Não existem visitas guiadas definidas")
+        return True
+    
 #Configurar: Adiciona dados de teste
 def Configurar():
     Visitas[0]["Lotação"] = 8

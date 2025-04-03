@@ -10,7 +10,7 @@ Requesitos funcionais:
 Utilizar set:
     - caracterisicas (Tipos)
 """
-import Utils, Obras, Visitas
+import Utils, Obras, Visitas, Estatisticas
 import os
 
 #Deve estar True quando em testes e False quando em produção
@@ -36,6 +36,9 @@ def MenuPrincipal():
         
         if Op == 2:
             Visitas.MenuVisitas()
+        
+        if Op == 3:
+            Estatisticas.MenuEstatisticas()
 
 if __name__ == "__main__":
     MenuPrincipal()

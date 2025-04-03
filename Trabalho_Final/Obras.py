@@ -9,6 +9,7 @@ Colecao = []
 
 #Lista de raridades das obras
 Raridades = ["Comum", "Raro", "Epico", "Lendario", "Mitico"]
+Campos = {"Id": 0, "Tipo": 0, "Ano": 0, "Autor": 0} 
 
 #Menu Obras
 def MenuObras():
@@ -42,21 +43,25 @@ def Adicionar():
 
     #Tipo
     Tipo = Utils.Ler_Strings(2, "Qual o tipo da obra? ")
+    if len(Tipo) > Campos["Tipo"]:
+        Campos["Tipo"] = len(Tipo)
 
     #Ano
-    Data_Atual = datetime.now()
-    Str_Data_Atual = Data_Atual.strftime("%Y-%m-%d")
-
-    Str_Data_Atual = Str_Data_Atual.split("-")
-    Ano_Atual = int(Str_Data_Atual[0])
-
-    Ano = Utils.Ler_Inteiro_Limites(-4543000000, Ano_Atual, "Introduza o ano criação da obra: ")
+    Ano = Adicionar_Ano()
 
     #Autor
     Autor = Utils.Ler_Strings(2, "Qual o autor da obra? ")
+    if len(Autor) > Campos["Autor"]:
+        Campos["Autor"] = len(Autor)
 
     #Preço Atual
-    Preco_Atual = Utils.Ler_Decimal("Qual o preço atual da obra? ")
+    while True:
+        Preco_Atual = Utils.Ler_Decimal("Qual o preço atual da obra? ")
+        if Preco_Atual > 0:
+            break
+
+        else:
+            print("O preço precisa ser um valor positivo")
 
     #Raridade
     N_Raridade = Utils.Menu(Raridades, "Qual a raridade da obra? ")
@@ -69,6 +74,9 @@ def Adicionar():
     Id = 1
     if len(Colecao) > 0:
         Id = Colecao[len(Colecao) - 1]["Id"] + 1 #Gera o id a partir do id da ultima obra
+    
+    if len(str(Id)) > Campos["Is"]:
+        Campos["Id"] = len(str(Id))
 
     Nova_Obra ={"Id": Id,
                 "Tipo": Tipo,
@@ -83,9 +91,7 @@ def Adicionar():
 
 #Editar
 def Editar():
-    #Verificar se existem obras no museu
-    if len(Colecao) == 0:
-        print("Não existem obras na coleção")
+    if Verificar() == True:
         return
     
     #Pesquisar a obra a editar
@@ -93,7 +99,7 @@ def Editar():
 
     #Mostrar se não encontrar nenhuma obra
     if len(Resultado) == 0:
-        print("Não foram encontradas obras com esse critério x_X")
+        print("Não foram encontradas obras com esse critério")
         return
     
     #Mostrar todas as obras encontradas
@@ -110,7 +116,7 @@ def Editar():
             Obra_Encontrada = Obra
     
     if Obra_Encontrada == None: #Caso não exista nenhuma Obra com o Id indicado (Se estiver a None), alertar o utilizador
-        print(f"Não foi encontrada nenhuma obra com o id {Id} x_X")
+        print(f"Não foi encontrada nenhuma obra com o id {Id}")
         return
     
     #Criar lista com todos os campos da obra (Exceto id)
@@ -123,17 +129,39 @@ def Editar():
 
     #Mostrar o valor atual do campo a editar
     print(f"O campo {Campo} tem o valor {Obra_Encontrada[Campo]}\n")
-    Novo_Valor = Utils.Ler_Strings(3, "Novo Valor: ")
+
+    if Campo == "Ano":
+        Novo_Valor = Adicionar_Ano()
+
+    elif Campo == "Preco Atual":
+        #Preço Atual
+        while True:
+            Novo_Valor = Utils.Ler_Decimal("Qual o preço atual da obra? ")
+            if Novo_Valor > 0:
+                break
+
+            else:
+                print("O preço precisa ser um valor positivo")
+
+    elif Campo == "Raridade":
+        #Raridade
+        N_Raridade = Utils.Menu(Raridades, "Qual a raridade da obra? ")
+        Novo_Valor = Raridades[N_Raridade - 1]
+
+    else:
+        Novo_Valor = Utils.Ler_Strings(3, "Novo Valor: ")
 
     #Guardar o novo valor:
     Obra_Encontrada[Campo] = Novo_Valor
     print("Edição concluida com sucesso.")
 
+    if Campo in Campos:
+        if len(str(Novo_Valor)) > Campos[Campo]:
+            Campos[Campo] = len(str(Novo_Valor))
+
 #Apagar
 def Apagar():
-    #Verificar se existem obras no museu
-    if len(Colecao) == 0:
-        print("Não existem obras na coleção")
+    if Verificar() == True:
         return
     
     #Pesquisar a obra a apagar
@@ -164,17 +192,18 @@ def Apagar():
     Colecao.remove(Obra_Encontrada)
     print(f"Obra removida com sucesso, tem {len(Colecao)} obras")
 
-#Listar
-def Listar2():
-    """Função Listar mas mais leve"""
-    Utils.F_Titulo("Lista de Obras")
-    print(100*"-")
+    #Determinar a maior palavra de cada campo pois o maior pode ter sido eliminado
     for Obra in Colecao:
-        print(f"| Id: {Obra["Id"]} | Tipo: {Obra["Tipo"]} | Ano: {Obra["Ano"]} | Autor: {Obra["Autor"]}")
-        print(100*"-")
+        for Campo in Campos:
+            if len(str(Obra[Campo])) > Campos[Campo]:
+                Campos[Campo] = len(str(Obra[Campo]))
 
+#Listar
 def Listar(Colecao, Titulo = "Lista de Obras"):
     """Função para listar os campos (Id, Tipo, Ano, Autor) de todas as obras"""
+    if Verificar() == True:
+        return
+
     #Dicionario para guardar os campos e o comprimento da maior palavra de cada campo
     Campos = {"Id": 0, "Tipo": 0, "Ano": 0, "Autor": 0} 
 
@@ -214,6 +243,9 @@ def Pesquisar_Listar():
 
 def Pesquisar(Titulo = "Escolha o campo de pesquisa: "):
     """Devolve a lista de obras que correspondem ao critério"""
+    if Verificar() == True:
+        return
+    
     #Menu para o utilizador escolher o campo de pesquisa
     Op = Utils.Menu(["Tipo","Ano", "Autor", "Raridade"],Titulo)
 
@@ -245,12 +277,33 @@ def Pesquisar(Titulo = "Escolha o campo de pesquisa: "):
 
     return(L_Resultado)
 
+#Verificar se a  coleção está vazia
+def Verificar():
+    #Verificar se existem obras no museu
+    if len(Colecao) == 0:
+        print("Não existem obras na coleção")
+        return True
+
+#Adicionar Ano (com verificações)
+def Adicionar_Ano():
+    Data_Atual = datetime.now()
+    Str_Data_Atual = Data_Atual.strftime("%Y-%m-%d")
+
+    Str_Data_Atual = Str_Data_Atual.split("-")
+    Ano_Atual = int(Str_Data_Atual[0])
+
+    Ano = Utils.Ler_Inteiro_Limites(-4543000000, Ano_Atual, "Introduza o ano criação da obra: ")
+
+    if len(Ano) > Campos["Ano"]:
+        Campos["Ano"] = len(Ano)
+    return Ano
+
 #Configurar
 def Configurar():
     Exemplo_Obras = [
-    {"Id": 1, "Tipo": "Livro", "Ano": "1984", "Autor": "O melhor", "Preco Atual": 15.99, "Raridade": "Comum", "Descricao": "Um clássico da ciencia."},
-    {"Id": 2, "Tipo": "Moeda", "Ano": "1675", "Autor": "Julio César", "Preco Atual": 1390.26, "Raridade": "Raro", "Descricao": "Uma moeda Romana"},
-    {"Id": 3, "Tipo": "Pintura", "Ano": "1214", "Autor": "Leonardo Da Vinci", "Preco Atual": 1394300, "Raridade": "Epico", "Descricao": "Uma rara pintura de Leonardo Da Vinci"}]
+    {"Id": 1, "Tipo": "Livro", "Ano": 1984, "Autor": "O melhor", "Preco Atual": 15.99, "Raridade": "Comum", "Descricao": "Um clássico da ciencia."},
+    {"Id": 2, "Tipo": "Moeda", "Ano": 1675, "Autor": "Julio César", "Preco Atual": 1390.26, "Raridade": "Raro", "Descricao": "Uma moeda Romana"},
+    {"Id": 3, "Tipo": "Pintura", "Ano": 1214, "Autor": "Leonardo Da Vinci", "Preco Atual": 1394300, "Raridade": "Epico", "Descricao": "Uma rara pintura de Leonardo Da Vinci"}]
 
     #Adicionar as obras
     Colecao.extend(Exemplo_Obras) #append adiciona, extend junta
