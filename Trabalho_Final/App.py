@@ -11,6 +11,7 @@ Utilizar set:
     - caracterisicas (Tipos)
 """
 import Utils, Obras, Visitas
+import os
 
 #Deve estar True quando em testes e False quando em produção
 DEBUG = True
@@ -21,10 +22,13 @@ def MenuPrincipal():
         Visitas.Configurar()
 
     while True:
+        os.system("cls")
         Op = Utils.Menu(["Obras", "Visitas", "Estatísticas", "Sair"], "Menu Principal")
         print("")
 
         if Op == 4:
+            Utils.F_Titulo("Criado por Dinis Sousa")
+            os.system("cls")
             break
             
         if Op == 1:
