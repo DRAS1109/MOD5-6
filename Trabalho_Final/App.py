@@ -26,7 +26,7 @@ def MenuPrincipal():
         Op = Utils.Menu(["Obras", "Visitas", "Estatísticas", "Sair"], "Menu Principal")
         print("")
 
-        if Op == 4:
+        if Op == 0:
             Utils.F_Titulo("Criado por Dinis Sousa")
             os.system("cls")
             break

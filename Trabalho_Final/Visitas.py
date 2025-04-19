@@ -16,6 +16,7 @@ Modulo para gerir as visitas Guiadas ao museu
     - Listar (Visita 9-10: 30 pessoas | Visita 11-12: 27 pessoas)
 """
 import Utils
+import os
 
 Visitas = [{"Visita": 1, "Horario": "9-10" , "Lotacao": 0, "Lotacao Maxima": 30, "Id": []},
            {"Visita": 2, "Horario": "11-12", "Lotacao": 0, "Lotacao Maxima": 30, "Id": []},
@@ -23,7 +24,7 @@ Visitas = [{"Visita": 1, "Horario": "9-10" , "Lotacao": 0, "Lotacao Maxima": 30,
            {"Visita": 4, "Horario": "17-18", "Lotacao": 0, "Lotacao Maxima": 30, "Id": []}]
 
 #Dicionario para guardar os campos e o comprimento da maior palavra de cada campo
-Campos = {"Visita": 1, "Horario": 5, "Lotacao": 2,"Lotacao Maxima": 2} #Começa com valores pois existem visitas pre definidas
+Campos = {"Visita": 1, "Horario": 5, "Lotacao": 1,"Lotacao Maxima": 2} #Começa com valores pois existem visitas pre definidas
 
 #Adicionar Horario
 def Adicionar_Horario():
@@ -286,19 +287,19 @@ def Menu_Horarios():
         Op = Utils.Menu(["Adicionar", "Editar", "Apagar","Listar","Voltar"], "Menu dos horarios")
         print("")
 
-        if Op == 5:
+        if Op == 0:
             break
 
-        if Op == 1:
+        elif Op == 1:
             Adicionar_Horario()
 
-        if Op == 2:
+        elif Op == 2:
             Editar()
         
-        if Op == 3:
+        elif Op == 3:
             Apagar()
         
-        if Op == 4:
+        elif Op == 4:
             Listar(Visitas)
 
 #Menu para Visitas Guiadas
@@ -308,30 +309,32 @@ def Menu_Visitas_Guiadas():
         Op = Utils.Menu(["Adicionar Visitantes", "Cancelar Visitas", "Voltar"], "Menu das visitas guiadas")
         print("")
 
-        if Op == 3:
+        if Op == 0:
             break
 
-        if Op == 1:
+        elif Op == 1:
             Adicionar_Visitantes()
 
-        if Op == 2:
+        elif Op == 2:
             Cancelar_Visitantes()
 
 #Menu principal do modulo
 def MenuVisitas():
     """Menu para visitas"""
+    os.system("cls")
 
     while True:
+        os.system("cls")
         Op = Utils.Menu(["Horarios", "Visitante","Voltar"], "Menu de visitas")
-        print("")
+        os.system("cls")
 
-        if Op == 3:
+        if Op == 0:
             break
 
-        if Op == 1:
+        elif Op == 1:
             Menu_Horarios()
 
-        if Op == 2:
+        elif Op == 2:
             Menu_Visitas_Guiadas()
 
 #Verificar se a lista de visitas está vazia

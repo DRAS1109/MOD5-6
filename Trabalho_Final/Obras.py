@@ -19,22 +19,22 @@ def MenuObras():
         Op = Utils.Menu(["Adicionar", "Editar", "Apagar", "Listar", "Pesquisar", "Voltar"], "Menu de Obras")
         print("")
 
-        if Op == 6:
+        if Op == 0:
             break
 
-        if Op == 1:
+        elif Op == 1:
             Adicionar()
 
-        if Op == 2:
+        elif Op == 2:
             Editar()
         
-        if Op == 3:
+        elif Op == 3:
             Apagar()
 
-        if Op == 4:
+        elif Op == 4:
             Listar(Colecao)
         
-        if Op == 5:
+        elif Op == 5:
             Pesquisar_Listar()
 
 #Adicionar
@@ -96,6 +96,9 @@ def Editar():
     
     #Pesquisar a obra a editar
     Resultado = Pesquisar("Campo a pesquisar")
+
+    if Resultado == None:
+        return
 
     #Mostrar se não encontrar nenhuma obra
     if len(Resultado) == 0:
@@ -169,7 +172,7 @@ def Apagar():
 
     #Mostrar se não encontrar nenhuma obra
     if len(Resultado) == 0:
-        print("Não foram encontradas obras com esse critério x_X")
+        print("Não foram encontradas obras com esse critério")
         return
     
     #Mostrar todas as obras encontradas
@@ -186,7 +189,7 @@ def Apagar():
             Obra_Encontrada = Obra
     
     if Obra_Encontrada == None: #Caso não exista nenhuma Obra com o Id indicado (Se estiver a None), alertar o utilizador
-        print(f"Não foi encontrada nenhuma obra com o id {Id} x_X")
+        print(f"Não foi encontrada nenhuma obra com o id {Id}")
         return
     
     Colecao.remove(Obra_Encontrada)
@@ -250,7 +253,10 @@ def Pesquisar(Titulo = "Escolha o campo de pesquisa: "):
         return
     
     #Menu para o utilizador escolher o campo de pesquisa
-    Op = Utils.Menu(["Tipo","Ano", "Autor", "Raridade"],Titulo)
+    Op = Utils.Menu(["Tipo","Ano", "Autor", "Raridade", "Cancelar"],Titulo)
+
+    if Op == 5:
+        return None
 
     #Criar uma lista para os resultados
     L_Resultado = []

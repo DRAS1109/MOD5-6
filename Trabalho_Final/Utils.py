@@ -5,7 +5,7 @@ def Ler_Inteiro(Mensagem="Introduza um valor inteiro: ") -> int:
     """
 
     while True:
-        Dados = input(Mensagem)
+        Dados = input(Mensagem).strip()
 
         if len(Dados) == 0:
             continue
@@ -49,7 +49,7 @@ def Ler_Decimal(Mensagem="Introduza um valor inteiro: "):
     """
     
     while True:
-        Dados = input(Mensagem)
+        Dados = input(Mensagem).strip()
 
         if len(Dados) == 0:
             continue
@@ -94,7 +94,7 @@ def Ler_Nome_Litimes(Min, Max=None, Mensagem="Introduza uma palavra: "):
     """
 
     while True:
-        Nome = input(Mensagem)
+        Nome = input(Mensagem).strip()
         if (Min == None and len(Nome) <= Max) or (Max == None and len(Nome) >= Min) or (len(Nome) >= Min and len(Nome) <= Max):
             return Nome
 
@@ -115,12 +115,18 @@ def Menu(Opcoes, Titulo=""):
     if Titulo != "":
         F_Titulo(Titulo)
 
+    Temp = 0
+    if Opcoes[len(Opcoes) - 1] == "Voltar" or Opcoes[len(Opcoes) - 1] == "Sair":
+        Palavra = Opcoes[len(Opcoes) - 1]
+        print(f"0) {Palavra}")
+        Temp = 1
+
     #Mostrar as opções com 1 nº
-    for i in range(len(Opcoes)):
+    for i in range(len(Opcoes) - Temp):
         print(f"{i + 1}) {Opcoes[i]}")
 
     #Ler a opção do uilizador
-    Op = Ler_Inteiro_Limites(1, len(Opcoes), "Opção: ")
+    Op = Ler_Inteiro_Limites(1 - Temp, len(Opcoes) - Temp, "Opção: ")
 
     #Se for valida devolvemos
     return Op
@@ -136,7 +142,7 @@ def Ler_Strings(Tamanho_Min, Mensagen="Introduza um texto: "):
     Remove os espaços em branco do inicio e do final. 
     Mostra uma mensagem para a introdução do código"""
     while True:
-        Texto = input(Mensagen)
+        Texto = input(Mensagen).strip()
         Texto = Texto.strip()
         if len(Texto) >= Tamanho_Min:
             return(Texto)

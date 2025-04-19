@@ -14,26 +14,29 @@ def MenuEstatisticas():
         Op = Utils.Menu(["Raridades", "Valor da coleção","Obra mais antiga", "Todos os autores", "Horario mais visitado", "Voltar"], "Menu de estatisticas")
         print("")
 
-        if Op == 6:
+        if Op == 0:
             break
 
-        if Op == 1:
+        elif Op == 1:
             E_Raridades()
 
-        if Op == 2:
+        elif Op == 2:
             E_Preco()
 
-        if Op == 3:
+        elif Op == 3:
             E_Antiga()
 
-        if Op == 4:
+        elif Op == 4:
             E_Autores()
         
-        if Op == 5:
+        elif Op == 5:
             E_Horario()
     
 
 def E_Raridades():
+    if len(Obras.Colecao) < 1:
+        return
+    
     Raridades = {"Comum": 0, "Raro": 0, "Epico": 0, "Lendario": 0, "Mitico": 0}
 
     #Contar quantas raridades tem a coleção
@@ -58,6 +61,9 @@ def E_Preco():
     print(f"A coleção tem um preço estimado de {Preco_Total}")
 
 def E_Antiga():
+    if len(Obras.Colecao) < 1:
+        return
+
     #Encontrar o mais utilizado
     Antiga = Obras.Colecao[0]["Ano"]
     for Obra in Obras.Colecao:
@@ -70,6 +76,9 @@ def E_Antiga():
     print(f"Descrição: {O_Antiga["Descricao"]}")
 
 def E_Autores():
+    if len(Obras.Colecao) < 1:
+        return
+    
     Autores = {Obras.Colecao[0]["Autor"]}
     for Obra in Obras.Colecao:
         Autores.add(Obra["Autor"])
