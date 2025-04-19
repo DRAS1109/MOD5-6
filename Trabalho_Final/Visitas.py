@@ -18,10 +18,10 @@ Modulo para gerir as visitas Guiadas ao museu
 import Utils
 import os
 
-Visitas = [{"Visita": 1, "Horario": "9-10" , "Lotacao": 0, "Lotacao Maxima": 30, "Id": []},
-           {"Visita": 2, "Horario": "11-12", "Lotacao": 0, "Lotacao Maxima": 30, "Id": []},
-           {"Visita": 3, "Horario": "15-16", "Lotacao": 0, "Lotacao Maxima": 30, "Id": []},
-           {"Visita": 4, "Horario": "17-18", "Lotacao": 0, "Lotacao Maxima": 30, "Id": []}]
+Visitas = [{"Visita": 1, "Horario": "9-10" , "Lotacao": 0, "Lotacao Maxima": 30, "Id": {}},
+           {"Visita": 2, "Horario": "11-12", "Lotacao": 0, "Lotacao Maxima": 30, "Id": {}},
+           {"Visita": 3, "Horario": "15-16", "Lotacao": 0, "Lotacao Maxima": 30, "Id": {}},
+           {"Visita": 4, "Horario": "17-18", "Lotacao": 0, "Lotacao Maxima": 30, "Id": {}}]
 
 #Dicionario para guardar os campos e o comprimento da maior palavra de cada campo
 Campos = {"Visita": 1, "Horario": 5, "Lotacao": 1,"Lotacao Maxima": 2} #Começa com valores pois existem visitas pre definidas
@@ -187,7 +187,7 @@ def Apagar():
 
 #Listar 
 def Listar(Visitas, Titulo = "Lista de Visitas"):
-    """Função para listar os campos (Visita, Horario, Lotação maxima) de todas as Visitas"""
+    """Função para listar os campos (Visita, Horario e Lotação maxima) de todas as Visitas"""
 
     if Verificar() == True:
         return
@@ -198,21 +198,24 @@ def Listar(Visitas, Titulo = "Lista de Visitas"):
         Tamanho += Campos[Campo] + len(Campo)
 
     #Adicionar à variavel tamanho os "extras" (espaços, : e |)
-    Extras = (len(Campos) *2) + (len(Campos) *3) - 1 
-        #*2 porque cada campo tem : e espaço
-        #*3 porque cada campo tem espaço | espaço
-        #-1 porque começa com 1 espaço
+    Extras = (len(Campos) *2) + (len(Campos) *3) + 1 # Espaços, : e | + 1 para o primeiro e último |
     Tamanho += Extras  
     
     #Imprimir Titulo
     Utils.F_Titulo(Titulo)
 
     #Imprimir os dados
-    print(f" {Tamanho*"-"}")
+    print("-" * Tamanho)
+
     for Visita in Visitas:
+        Linha = ""
         for Campo in Campos:
-            print(f" {Campo}: {Visita[Campo]} {" " * (Campos[Campo] - len(str(Visita[Campo])))}", end="|")
-        print("\n", Tamanho*"-")
+            CampoTexto = f"{Campo}: {Visita[Campo]}"
+            Espacos = " " * (Campos[Campo] - len(str(Visita[Campo])))
+            Linha += f"| {CampoTexto}{Espacos} "
+        Linha += "|"
+        print(Linha)
+        print("-" * Tamanho)
 
 
 #Adicionar Visitantes
@@ -250,7 +253,7 @@ def Adicionar_Visitantes():
     print(f"Visita: {Visita['Visita']}, Horario: {Visita["Horario"]}, Id: {Id}")
 
     Visita["Lotacao"] += N_Pessoas
-    Visita["Id"].append({Id:N_Pessoas})
+    Visita["Id"].update({Id:N_Pessoas})
 
     #Verificar se o tamanho do campo Lotacao é maior do que os anteriores
     if len(str(Visita["Lotacao"])) > Campos["Lotacao"]:
@@ -277,7 +280,7 @@ def Cancelar_Visitantes():
 
     N_Pessoas = Visita["Id"][Id]
     Visita["Lotacao"] -= N_Pessoas
-    Visita["Id"].remove({Id:N_Pessoas})
+    del Visita["Id"][Id]
 
 
 #Menu para Horarios
@@ -347,10 +350,10 @@ def Verificar():
 #Configurar: Adiciona dados de teste
 def Configurar():
     Visitas[0]["Lotacao"] = 8
-    Visitas[0]["Id"].append({1: 8})
+    Visitas[0]["Id"].update({1: 8})
 
     Visitas[1]["Lotacao"] = 21
-    Visitas[1]["Id"].append({1:6, 2:12, 3:3})
+    Visitas[1]["Id"].update({1:6, 2:12, 3:3})
 
     Visitas[3]["Lotacao"] = 15
-    Visitas[3]["Id"].append({1:3, 2:12})
+    Visitas[3]["Id"].update({1:3, 2:12})

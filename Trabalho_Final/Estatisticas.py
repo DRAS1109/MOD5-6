@@ -35,6 +35,7 @@ def MenuEstatisticas():
 
 def E_Raridades():
     if len(Obras.Colecao) < 1:
+        print("Não tem obras na sua coleção")
         return
     
     Raridades = {"Comum": 0, "Raro": 0, "Epico": 0, "Lendario": 0, "Mitico": 0}
@@ -62,21 +63,27 @@ def E_Preco():
 
 def E_Antiga():
     if len(Obras.Colecao) < 1:
+        print("Não tem obras na sua coleção")
         return
 
-    #Encontrar o mais utilizado
+    # Encontrar a obra mais antiga
     Antiga = Obras.Colecao[0]["Ano"]
     for Obra in Obras.Colecao:
         if Obra["Ano"] < Antiga:
             Antiga = Obra["Ano"]
-            O_Antiga = Obra
 
-    print("Obra mais antiga:")
-    print(f"Id: {O_Antiga["Id"]} | Tipo: {O_Antiga["Tipo"]} | Ano: {O_Antiga["Ano"]} | Autor: {O_Antiga["Autor"]} | Preço: {O_Antiga["Preco Atual"]} | Raridade: {O_Antiga["Raridade"]}")
-    print(f"Descrição: {O_Antiga["Descricao"]}")
+    # Guardar todas as obras com esse ano
+    L_O_Antiga = []
+    for Obra in Obras.Colecao:
+        if Obra["Ano"] == Antiga:
+            L_O_Antiga.append(Obra)
+
+    print(f"\nObras mais antigas (ano {Antiga}):")
+    Obras.Listar(L_O_Antiga, "Obras mais Antigas", {"Id": 0, "Tipo": 0, "Ano": 0, "Autor": 0, "Preco Atual": 0, "Raridade": 0, "Descricao": 0})
 
 def E_Autores():
     if len(Obras.Colecao) < 1:
+        print("Não tem obras na sua coleção")
         return
     
     Autores = {Obras.Colecao[0]["Autor"]}

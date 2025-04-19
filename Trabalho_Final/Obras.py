@@ -9,6 +9,8 @@ Colecao = []
 
 #Lista de raridades das obras
 Raridades = ["Comum", "Raro", "Epico", "Lendario", "Mitico"]
+
+#Dicionario para guardar os campos e o comprimento da maior palavra de cada campo
 Campos = {"Id": 0, "Tipo": 0, "Ano": 0, "Autor": 0} 
 
 #Menu Obras
@@ -202,13 +204,10 @@ def Apagar():
                 Campos[Campo] = len(str(Obra[Campo]))
 
 #Listar
-def Listar(Colecao, Titulo = "Lista de Obras"):
+def Listar(Colecao, Titulo = "Lista de Obras", Campos = Campos):
     """Função para listar os campos (Id, Tipo, Ano, Autor) de todas as obras"""
     if Verificar() == True:
         return
-
-    #Dicionario para guardar os campos e o comprimento da maior palavra de cada campo
-    Campos = {"Id": 0, "Tipo": 0, "Ano": 0, "Autor": 0} 
 
     #Determinar a maior palavra de cada campo
     for Obra in Colecao:
@@ -222,21 +221,26 @@ def Listar(Colecao, Titulo = "Lista de Obras"):
         Tamanho += Campos[Campo] + len(Campo)
 
     #Adicionar à variavel tamanho os "extras" (espaços, : e |)
-    Extras = (len(Campos) *2) + (len(Campos) *3) - 1 
-        #*2 porque cada campo tem : e espaço E 
+    Extras = (len(Campos) *2) + (len(Campos) *3) + 1
+        #*2 porque cada campo tem : e espaços
         #*3 porque cada campo tem espaço | espaço
-        #-1 porque começa com 1 espaço
+        #+1 porque começa e termina com 1 |
     Tamanho += Extras  
 
     #Imprimir Titulo
     Utils.F_Titulo(Titulo)
 
     #Imprimir os dados
-    print(f" {Tamanho*"-"}")
+    print(Tamanho * "-")
     for Obra in Colecao:
+        Linha = ""
         for Campo in Campos:
-            print(f" {Campo}: {Obra[Campo]} {" " * (Campos[Campo] - len(str(Obra[Campo])))}", end="|")
-        print("\n", Tamanho*"-")
+            CampoTexto = f"{Campo}: {Obra[Campo]}"
+            Espacos = " " * (Campos[Campo] - len(str(Obra[Campo])))
+            Linha += f"| {CampoTexto}{Espacos} "
+        Linha += "|"
+        print(Linha)
+        print("-" * Tamanho)
 
 #Pesquisar
 def Pesquisar_Listar():
@@ -253,9 +257,9 @@ def Pesquisar(Titulo = "Escolha o campo de pesquisa: "):
         return
     
     #Menu para o utilizador escolher o campo de pesquisa
-    Op = Utils.Menu(["Tipo","Ano", "Autor", "Raridade", "Cancelar"],Titulo)
+    Op = Utils.Menu(["Tipo","Ano", "Autor", "Raridade", "Voltar"],Titulo)
 
-    if Op == 5:
+    if Op == 0:
         return None
 
     #Criar uma lista para os resultados
