@@ -23,7 +23,7 @@ Visitas = [{"Visita": 1, "Horario": "9-10" , "Lotacao": 0, "Lotacao Maxima": 30,
            {"Visita": 4, "Horario": "17-18", "Lotacao": 0, "Lotacao Maxima": 30, "Id": []}]
 
 #Dicionario para guardar os campos e o comprimento da maior palavra de cada campo
-Campos = {"Visita": 1, "Horario": 5, "Lotacao": 1,"Lotacao Maxima": 2} #Começa com valores pois existem visitas pre definidas
+Campos = {"Visita": 1, "Horario": 5, "Lotacao": 2,"Lotacao Maxima": 2} #Começa com valores pois existem visitas pre definidas
 
 #Adicionar Horario
 def Adicionar_Horario():
@@ -33,17 +33,22 @@ def Adicionar_Horario():
     Horario = Utils.Ler_Strings(2, "Qual o horario (Exemplo: 8-9): ")
     Horario = Horario.strip()
 
-    #Verificar se o horario é valido´
-    Horarios_Visitas = {Visitas[0]["Horario"]}
+    #Verificar se o horario é valido
+    Horarios_Visitas = set()
     for Visita in Visitas:
         Horarios_Visitas.add(Visita["Horario"])
 
     L_Horario = Horario.split("-")
+
+    if len(L_Horario) != 2:
+        print("Horario inválido. Deve ter o seguinte formato: X-Y")
+        return
+    
     if L_Horario[0].isdigit() and L_Horario[1].isdigit():
         L_Horario[0] = int(L_Horario[0])
         L_Horario[1] = int(L_Horario[1])
 
-        if (L_Horario[0] < 0 or L_Horario[0] > 24) or (L_Horario[1] < 0 or L_Horario[1] > 23):
+        if (L_Horario[0] < 0 or L_Horario[0] > 23) or (L_Horario[1] < 0 or L_Horario[1] > 23):
             print("Horario inválido. Deve ser composto por numeros entre 0 e 23")
             return
 
@@ -55,7 +60,7 @@ def Adicionar_Horario():
         return
 
     #Lotacao Maxima
-    Lotacao_Maxima = Utils.Ler_Inteiro("Qual a lotação máxima? ")
+    Lotacao_Maxima = Utils.Ler_Inteiro_Limites(1, None, "Qual a lotação máxima? ")
 
     #Numero da visita (id)
     NVisita = 1
@@ -65,7 +70,8 @@ def Adicionar_Horario():
     Nova_Obra ={"Visita": NVisita,
                 "Horario": Horario,
                 "Lotacao": 0, 
-                "Lotacao Maxima": Lotacao_Maxima}
+                "Lotacao Maxima": Lotacao_Maxima,
+                "Id": []}
     
     Visitas.append(Nova_Obra)
     print(f"Visita adicionada com sucesso. \n")
@@ -78,7 +84,7 @@ def Adicionar_Horario():
         Campos["Horario"] = len(Horario)
 
     if len(str(Lotacao_Maxima)) > Campos["Lotacao Maxima"]:
-        Campos["Lotacao Maxima"] = len(str(Lotacao_Maxima))           
+        Campos["Lotacao Maxima"] = len(str(Lotacao_Maxima))
 
 #Editar Horarios
 def Editar():
@@ -111,11 +117,16 @@ def Editar():
         for Visita in Visitas:
             Horarios_Visitas.append(Visita["Horario"])
 
-        Horario = Utils.Ler_Strings(2, "Qual o horario (Exemplo: 8-9): ")
+        Horario = Utils.Ler_Strings(3, "Qual o horario (Exemplo: 8-9): ")
         Horario = Horario.strip()
 
-        #Verificar se o horario é valido
+        #Verificar se o horario é válido
         L_Horario = Horario.split("-")
+
+        if len(L_Horario) != 2:
+            print("Horario inválido. Deve ter o seguinte formato: X-Y")
+            return
+    
         if L_Horario[0].isdigit() and L_Horario[1].isdigit():
             L_Horario[0] = int(L_Horario[0])
             L_Horario[1] = int(L_Horario[1])
@@ -135,7 +146,7 @@ def Editar():
 
     #Se o campo a editar for Lotação maxima
     if Campo == Lista_Campos[1]:
-        Novo_Valor = Utils.Ler_Inteiro("Qual a lotação máxima? ")
+        Novo_Valor = Utils.Ler_Inteiro_Limites(1, None, "Qual a lotação máxima? ")
 
     #Guardar o novo valor:
     Visita_Encontrada[Campo] = Novo_Valor
@@ -209,32 +220,40 @@ def Adicionar_Visitantes():
         return
     
     #Numero de Pessoas
-    N_Pessoas = Utils.Ler_Inteiro("Quantas pessoas são? ")
+    N_Pessoas = Utils.Ler_Inteiro_Limites(1, None, "Quantas pessoas são? ")
 
     #Listar todas com espaços livres para o nº de pessoas
     Visitas_Encontradas = []
+    L_Visitas_Encontradas = []
     for Visita in Visitas:
         if Visita["Lotacao Maxima"] - Visita["Lotacao"] > N_Pessoas:
-            Visitas_Encontradas.append(Visita["Visita"])
-    
+            Visitas_Encontradas.append(Visita)
+            L_Visitas_Encontradas.append(Visita["Visita"])
+
     Listar(Visitas_Encontradas)
 
     #Utilizador escolher qual visita
     Max = Visitas[len(Visitas) - 1]["Visita"] #N da ultima visita
-    N_Visita = Utils.Ler_Inteiro_Limites(0, Max,f"Visita a (Numero) ou 0  para cancelar: ")
+    N_Visita = Utils.Ler_Inteiro_Limites(1, Max,f"Visita (Numero) ou 0 para cancelar: ")
 
-    if N_Visita == 0 or N_Visita not in Visitas_Encontradas:
+    if N_Visita not in L_Visitas_Encontradas:
+        if N_Visita != 0:
+            print("Visita não corresponde às encontradas")
         return
     Visita = Visitas[N_Visita - 1] #Dicionario da visita encontrada
 
     #Id
     Id = 1
-    if len(Visita["Lotacao"]) > 0:
-        Id = Visita[len("Lotacao") - 1]["Id"] + 1 #Gera o id a partir do id da ultima obra
+    if len(str(Visita["Lotacao"])) > 0:
+        Id = len(Visita["Id"]) + 1 #Gera o id a partir do id da ultima visita
     print(f"Visita: {Visita['Visita']}, Horario: {Visita["Horario"]}, Id: {Id}")
 
     Visita["Lotacao"] += N_Pessoas
     Visita["Id"].append({Id:N_Pessoas})
+
+    #Verificar se o tamanho do campo Lotacao é maior do que os anteriores
+    if len(str(Visita["Lotacao"])) > Campos["Lotacao"]:
+        Campos["Lotacao"] = len(str(Visita["Lotacao"]))
 
 #Cancelar Visitas
 def Cancelar_Visitantes():
@@ -243,12 +262,15 @@ def Cancelar_Visitantes():
     
     #Utilizador escolhe qual visita
     Max = len(Visitas)
-    N_Visita = Utils.Ler_Inteiro_Limites(0, Max,f"Visita a (Numero) ou 0  para cancelar: ")
+    N_Visita = Utils.Ler_Inteiro_Limites(0, Max,f"Visita (Numero) ou 0 (Cancelar): ")
+    if N_Visita == 0:
+        return
+    
     Visita = Visitas[N_Visita - 1]
 
     Id = Utils.Ler_Inteiro("Qual o id atribuido? ")
 
-    if Id not in Visita["Id"]:
+    if Id not in Visita["Id"]: #TODO: Percorrer dicionarios e ver qual tem
         print("O id indicado não existe")
         return
 
@@ -321,11 +343,11 @@ def Verificar():
     
 #Configurar: Adiciona dados de teste
 def Configurar():
-    Visitas[0]["Lotação"] = 8
-    Visitas[0]["Id"] = {1: 8}
+    Visitas[0]["Lotacao"] = 8
+    Visitas[0]["Id"].append({1: 8})
 
-    Visitas[1]["Lotação"] = 21
-    Visitas[1]["Id"] = {1:6, 2:12, 3:3}
+    Visitas[1]["Lotacao"] = 21
+    Visitas[1]["Id"].append({1:6, 2:12, 3:3})
 
-    Visitas[3]["Lotação"] = 15
-    Visitas[3]["Id"] = {1:3, 2:12}
+    Visitas[3]["Lotacao"] = 15
+    Visitas[3]["Id"].append({1:3, 2:12})

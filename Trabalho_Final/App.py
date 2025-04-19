@@ -14,7 +14,7 @@ import Utils, Obras, Visitas, Estatisticas
 import os
 
 #Deve estar True quando em testes e False quando em produção
-DEBUG = True
+DEBUG = False
 
 def MenuPrincipal():
     if DEBUG:

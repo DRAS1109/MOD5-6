@@ -75,7 +75,7 @@ def Adicionar():
     if len(Colecao) > 0:
         Id = Colecao[len(Colecao) - 1]["Id"] + 1 #Gera o id a partir do id da ultima obra
     
-    if len(str(Id)) > Campos["Is"]:
+    if len(str(Id)) > Campos["Id"]:
         Campos["Id"] = len(str(Id))
 
     Nova_Obra ={"Id": Id,
@@ -239,6 +239,9 @@ def Listar(Colecao, Titulo = "Lista de Obras"):
 def Pesquisar_Listar():
     """Apresenta lista de obras que correspondem ao critério"""
     Resultado = Pesquisar()
+    if Resultado == None:
+        return
+    
     Listar(Resultado, "Obras encontradas")
 
 def Pesquisar(Titulo = "Escolha o campo de pesquisa: "):
@@ -272,7 +275,7 @@ def Pesquisar(Titulo = "Escolha o campo de pesquisa: "):
 
     #Adicionar à lista as Obras que correspondem ao resultado da pesquisa
     for Obra in Colecao:
-        if Pesquisa.lower() in Obra[Campo].lower():
+        if Pesquisa.lower() in str(Obra[Campo]).lower():
             L_Resultado.append(Obra)
 
     return(L_Resultado)
@@ -294,8 +297,8 @@ def Adicionar_Ano():
 
     Ano = Utils.Ler_Inteiro_Limites(-4543000000, Ano_Atual, "Introduza o ano criação da obra: ")
 
-    if len(Ano) > Campos["Ano"]:
-        Campos["Ano"] = len(Ano)
+    if len(str(Ano)) > Campos["Ano"]:
+        Campos["Ano"] = len(str(Ano))
     return Ano
 
 #Configurar

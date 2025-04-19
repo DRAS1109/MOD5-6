@@ -11,7 +11,7 @@ def MenuEstatisticas():
     """Menu para visitas"""
 
     while True:
-        Op = Utils.Menu(["Raridades", "Valor da coleção","Obra mais antiga", "Todos os autores", "Horario mais visitado"], "Menu de estatisticas")
+        Op = Utils.Menu(["Raridades", "Valor da coleção","Obra mais antiga", "Todos os autores", "Horario mais visitado", "Voltar"], "Menu de estatisticas")
         print("")
 
         if Op == 6:
